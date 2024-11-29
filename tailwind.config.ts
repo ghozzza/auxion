@@ -16,6 +16,9 @@ const config: Config = {
       colors: {
         trueGray: colors.neutral,
       },
+      transitionDuration: {
+        "300": "300ms",
+      },
     },
     fontFamily: {
       sans: ["Inter", ...defaultTheme.fontFamily.sans],
@@ -28,3 +31,5 @@ const config: Config = {
   plugins: [],
 };
 export default config;
+
+// text-gray-500 dark:text-gray-400

@@ -9,10 +9,10 @@ import { useTheme } from "next-themes";
 
 export const Navbar = () => {
   const navigation = [
-    { id:1, name: "Home", url: "/" },
-    { id:2, name: "Auction", url: "/auctions" },
-    { id:3, name: "Balance", url: "/balance" },
-    { id:4, name: "About", url: "/about" },
+    { id: 1, name: "Home", url: "/" },
+    { id: 2, name: "Auction", url: "/auctions" },
+    { id: 3, name: "Balance", url: "/balance" },
+    { id: 4, name: "About", url: "/about" },
   ];
   const { theme, setTheme } = useTheme();
 
@@ -25,9 +25,9 @@ export const Navbar = () => {
             <span>
               <Image
                 src={
-                  theme == "dark"
-                    ? "/img/logo_dark.png"
-                    : "/img/logo_light.png"
+                  theme === "light"
+                    ? "/img/logo_light.png"
+                    : "/img/logo_dark.png"
                 }
                 width="32"
                 alt="N"
@@ -43,12 +43,6 @@ export const Navbar = () => {
         <div className="gap-3 nav__item mr-2 lg:flex ml-auto lg:ml-0 lg:order-2">
           <ThemeChanger />
           <div className="hidden mr-3 lg:flex nav__item">
-            {/* <Link
-              href="/"
-              className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"
-            >
-              Get Started
-            </Link> */}
             <ConnectButton
               theme={theme === "dark" ? "dark" : "light"}
               client={client}

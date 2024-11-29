@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThirdwebProvider>
-        <body className={inter.className + " bg-white dark:bg-slate-900"}>
+        <body className={inter.className + " bg-white dark:bg-slate-900 transition-all duration-300"}>
           <ThemeProvider attribute="class">
             <Navbar />
             <div>{children}</div>
