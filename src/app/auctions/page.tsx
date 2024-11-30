@@ -1,4 +1,4 @@
-"user client";
+"use client";
 import Container from "@/components/Container";
 import {
   Button,
@@ -8,32 +8,51 @@ import {
   Input,
   Label,
   Legend,
-  Select,
-  Textarea,
 } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import React from "react";
+import React, { useState } from "react";
 import heroImg from "../../../public/img/hero.png";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   let i = 0;
+  const [filter1, setFilter1] = useState(false);
+  const [filter2, setFilter2] = useState(false);
+  const [filter3, setFilter3] = useState(false);
   return (
     <Container>
+      <div className="grid grid-cols-3 gap-4 justify-between mb-5 content-center">
+        <div>
+          <div className="w-[31.33rem] max-w-xl px-4">
+            <Field>
+              <Input
+                placeholder="Search..."
+                className={clsx(
+                  "mt-3 block w-full h-12 rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white",
+                  "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                )}
+              />
+            </Field>
+          </div>
+        </div>
+        <div>
+          <h1 className="text-4xl text-bold text-center">Auctions</h1>
+        </div>
+        <div className="px-4">
+          <div className="grid grid-cols-3 w-[29rem] h-12 text-center justify-center content-center rounded-lg">
+            <div className={`${filter1 ? "bg-indigo-500" : "bg-white/5"} hover:bg-slate-500 py-3 duration-300 rounded-l-lg border-[1px] border-black cursor-pointer`} onClick={() => setFilter1(!filter1)}>
+              <p>NFT</p>
+            </div>
+            <div className={`${filter2 ? "bg-indigo-500" : "bg-white/5"} hover:bg-slate-500 py-3 duration-300 border-[1px] border-black cursor-pointer`}  onClick={() => setFilter2(!filter2)}>
+              <p>RWA</p>
+            </div>
+            <div className={`${filter3 ? "bg-indigo-500" : "bg-white/5"} hover:bg-slate-500 py-3 duration-300 rounded-r-lg border-[1px] border-black cursor-pointer`}  onClick={() => setFilter3(!filter3)}>
+              <p>Others</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols gap-4">
-        {/* uint256 id;
-        string name;
-        string documents;
-        string typeDocuments;
-        address seller;
-        address highestBidder;
-        uint256 highestBid;
-        bool isEnded;
-        uint256 startBid;
-        uint256 gapBid;
-        uint256 startDate;
-        uint256 endDate; */}
         {Array.from({ length: 10 }).map((_, i) => (
           <div className="w-full max-w-lg px-4" key={i}>
             <Fieldset className="space-y-6 rounded-xl dark:bg-white/5 bg-indigo-800/5 p-6 sm:p-10">
@@ -87,4 +106,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
