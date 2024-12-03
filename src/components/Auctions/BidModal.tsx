@@ -28,7 +28,6 @@ const fetchData = async (url: string): Promise<any> => {
     throw error;
   }
 };
-
 // Usage
 
 const BidModal = (props: IBidModal) => {
@@ -86,9 +85,10 @@ const BidModal = (props: IBidModal) => {
                 </Description>
                 <div className="grid grid-cols-8 gap-8">
                   <div className="col-span-7">
-                    <Input type="number"
+                    <Input
+                      type="number"
                       value={bid ?? ""}
-                      onInput={(e) => setBid(e?.target?.value)}
+                      onChange={(e) => setBid(e?.target?.value)}
                       className={clsx(
                         "mt-3 block w-full rounded-lg border-none bg-slate-500/70 py-1.5 px-3 text-sm/6 text-white",
                         "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
@@ -98,7 +98,12 @@ const BidModal = (props: IBidModal) => {
                   <div className="justify-center content-center mt-3">
                     <h1>ETH</h1>
                   </div>
-                  <p>US$ {bid ? convert.USD * bid : ""}</p>
+                  <div className="flex flex-row gap-3">
+                    <div>
+                      <p className="w-full">USD</p>
+                    </div>
+                    <div>{bid ? convert.USD * bid : ""}</div>
+                  </div>
                 </div>
               </Field>
               <div className="mt-4">

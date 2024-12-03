@@ -20,7 +20,7 @@ const AddAuction = () => {
       >
         Add Your Auction
       </Button>
-      <AddAuctionModal isOpen={isOpen} setIsOpen={setIsOpen} close={close} />
+      <AddAuctionModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 };

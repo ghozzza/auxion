@@ -16,20 +16,34 @@ import { contract } from "../../app/client";
 interface IAddAuctionModal {
   isOpen: boolean;
   setIsOpen: any;
-  close: Function;
 }
 
 const AddAuctionModal = (props: IAddAuctionModal) => {
   const [_name, setName] = useState<string>("");
   const [_documents, setDocuments] = useState<string>("");
   const [_typeDocuments, setTypeDocuments] = useState<string>("");
-  const [_price, setPrice] = useState<bigint>(BigInt(0));
-  const [_gapBid, setGapBid] = useState<bigint>(BigInt(0));
-  const [_startDate, setStartDate] = useState<bigint>(BigInt(0));
-  const [_endDate, setEndDate] = useState<bigint>(BigInt(0));
+  const [_price, setPrice] = useState("");
+  const [_gapBid, setGapBid] = useState("");
+  const [_startDate, setStartDate] = useState<number | null>(null);
+  const [_endDate, setEndDate] = useState<number | null>(null);
 
   const { mutate: sendTransaction } = useSendTransaction();
-
+  const toGMT7ISOString = (timestamp: any) => {
+    const date = new Date(timestamp + 7 * 60 * 60 * 1000);
+    return date.toISOString().slice(0, 16);
+  };
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateValue = e.target.value; // Input value as 'YYYY-MM-DDTHH:mm'
+    const localDate = new Date(dateValue); // Convert string to Date object
+    const utcTimestamp = localDate.getTime();
+    setStartDate(utcTimestamp); // Save UTC timestamp
+  };
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateValue = e.target.value; // Input value as 'YYYY-MM-DDTHH:mm'
+    const localDate = new Date(dateValue); // Convert string to Date object
+    const utcTimestamp = localDate.getTime();
+    setEndDate(utcTimestamp); // Save UTC timestamp
+  };
   const onClick = () => {
     const transaction = prepareContractCall({
       contract,
@@ -39,10 +53,10 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
         _name,
         _documents,
         _typeDocuments,
-        _price,
-        _gapBid,
-        _startDate,
-        _endDate,
+        BigInt(_price),
+        BigInt(_gapBid),
+        BigInt(_startDate ?? 0),
+        BigInt(_endDate ?? 0),
       ],
     });
     sendTransaction(transaction);
@@ -72,6 +86,8 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
             <p className="text-sm/6 font-medium text-white">Product Name</p>
             <Input
               type="text"
+              value={_name}
+              onChange={(e) => setName(e.target.value)}
               className={clsx(
                 "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
@@ -80,6 +96,9 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
             <p className="text-sm/6 font-medium text-white">Documents</p>
             <Input
               type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              value={_documents}
+              onChange={(e) => setDocuments(e?.target?.files?.[0]?.name || "")}
               className={clsx(
                 "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
@@ -88,16 +107,18 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
             <p className="text-sm/6 font-medium text-white">Type</p>
             <div className="relative">
               <Select
+                defaultValue={"Others"}
+                value={_typeDocuments ?? "Others"}
+                onChange={(e) => setTypeDocuments(e.target.value)}
                 className={clsx(
                   "mt-2 block w-full appearance-none rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
                   "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
                   "*:text-black"
                 )}
               >
-                <option value="active">Active</option>
-                <option value="paused">Paused</option>
-                <option value="delayed">Delayed</option>
-                <option value="canceled">Canceled</option>
+                <option value="NFT">NFT</option>
+                <option value="RWA">RWA</option>
+                <option value="Others">Others</option>
               </Select>
               <ChevronDownIcon
                 className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-white/60"
@@ -105,37 +126,62 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
               />
             </div>
             <p className="text-sm/6 font-medium text-white">Start Bid</p>
-            <Input
-              type="text"
-              className={clsx(
-                "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-              )}
-            />
+            <div className="flex flex-row gap-5">
+              <div className="justify-center content-center">$ETH</div>
+              <div className="w-full">
+                <Input
+                  value={_price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  type="number"
+                  className={clsx(
+                    "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                  )}
+                />
+              </div>
+            </div>
+            {_price}
             <p className="text-sm/6 font-medium text-white">Gap Bid</p>
+            <div className="flex flex-row gap-5">
+              <div className="justify-center content-center">$ETH</div>
+              <div className="w-full">
+                <Input
+                  value={_gapBid}
+                  onChange={(e) => setGapBid(e.target.value)}
+                  type="number"
+                  className={clsx(
+                    "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                  )}
+                />
+              </div>
+            </div>
+
+            <p className="text-sm/6 font-medium text-white">
+              Start Date (GMT +7)
+            </p>
             <Input
-              type="text"
-              className={clsx(
-                "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-              )}
-            />
-            <p className="text-sm/6 font-medium text-white">Start Date</p>
-            <Input
+              value={_startDate ? toGMT7ISOString(_startDate) : ""}
+              onChange={handleStartDateChange}
               type="datetime-local"
               className={clsx(
                 "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
               )}
             />
-            <p className="text-sm/6 font-medium text-white">End Date</p>
+            <p className="text-sm/6 font-medium text-white">
+              End Date (GMT +7)
+            </p>
             <Input
+              value={_endDate ? toGMT7ISOString(_endDate) : ""}
+              onChange={handleEndDateChange}
               type="datetime-local"
               className={clsx(
                 "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
                 "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
               )}
             />
+            {_endDate}
             <div className="mt-4">
               <Button
                 className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
