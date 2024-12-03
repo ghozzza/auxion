@@ -55,7 +55,7 @@ const BidModal = (props: IBidModal) => {
         onClick={open}
         className="rounded dark:bg-indigo-500 bg-indigo-900 py-2 px-4 text-sm text-gray-100 dark:text-gray-100 data-[hover]:bg-indigo-400 data-[hover]:data-[active]:bg-indigo-300 w-full mt-5 duration-300"
       >
-        Bid {props.index}
+        Bid
       </Button>
 
       <Dialog

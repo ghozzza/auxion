@@ -13,14 +13,17 @@ import BidModal from "./BidModal";
 
 interface CardProps {
   index: number;
+  name: string;
   heroImg: string | StaticImport;
-  //   seller: string;
-  //   highestBidder: string;
-  //   startBid: string;
-  //   gapBid: string;
-  //   title: string;
-  //   startDate: string;
-  //   endDate: string;
+  type: string;
+  seller: string;
+  highestBidder: string;
+  highestBid: number;
+  isEnded: boolean;
+  startBid: number;
+  gapBid: number;
+  startDate: number;
+  endDate: number;
 }
 
 const CardAuction = (props: CardProps) => {
@@ -28,7 +31,7 @@ const CardAuction = (props: CardProps) => {
     <div className="w-full max-w-lg px-4" key={props.index}>
       <Fieldset className="space-y-6 rounded-xl dark:bg-white/5 bg-indigo-800/5 p-6 sm:p-10">
         <Legend className="text-2xl text-center font-semibold text-gray-700 dark:text-gray-100">
-          Mutant Apes
+          {props.name}
         </Legend>
         <Field>
           <Image
@@ -43,27 +46,29 @@ const CardAuction = (props: CardProps) => {
         </Field>
         <Field>
           <Label className="text-sm/6 font-medium  text-gray-700 dark:text-gray-100/50">
-            Type: NFT/RWA/Certificate
+            {props.type}
           </Label>
           <Description className="text-sm/6  text-gray-700/50 dark:text-gray-100/50">
-            Seller: 0x000{props.index}
+            Seller: {props.seller}
           </Description>
           <div className="flex flex-col">
-            <div>Highest Bidder(0x000{props.index + 76})</div>
-            <div>{props.index} ETH</div>
+            <div>Highest Bidder</div>
+            <div className="text-[14px]">{props.highestBidder}</div>
+            <div>{props.highestBid / 10 ** 18} ETH</div>
           </div>
         </Field>
         <Field>
           <div className="flex flex-row justify-between">
             <Label className="text-sm/6 font-medium text-gray-700 dark:text-gray-100">
-              Start Bid: 0.{props.index + 1} ETH
+              Start Bid: {props.startBid / 10 ** 18} ETH
             </Label>
             <Label className="text-sm/6 font-medium text-gray-700 dark:text-gray-100">
-              Gap Bid: 0.0{props.index + 1} ETH
+              Gap Bid: {props.gapBid / 10 ** 18} ETH
             </Label>
           </div>
           <Description className="text-sm/6 text-gray-700 dark:text-gray-100 mt-5">
-            Start(Date) - End(Date) (Still Going/Ended)
+            {props.startDate} - {props.endDate}{" "}
+            {props.isEnded ? "(Ended)" : "(Ongoing)"}
           </Description>
           <BidModal index={props.index} />
         </Field>
