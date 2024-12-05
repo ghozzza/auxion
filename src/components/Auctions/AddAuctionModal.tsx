@@ -20,10 +20,10 @@ interface IAddAuctionModal {
 
 const AddAuctionModal = (props: IAddAuctionModal) => {
   const [_name, setName] = useState<string>("");
-  const [_documents, setDocuments] = useState("");
+  const [_documents, setDocuments] = useState<any>("");
   const [_typeDocuments, setTypeDocuments] = useState<string>("");
-  const [_price, setPrice] = useState("");
-  const [_gapBid, setGapBid] = useState("");
+  const [_price, setPrice] = useState<number>(0);
+  const [_gapBid, setGapBid] = useState<number>(0);
   const [_startDate, setStartDate] = useState<number | null>(null);
   const [_endDate, setEndDate] = useState<number | null>(null);
 
@@ -70,7 +70,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
     e.preventDefault();
     if (!_documents) return;
     const formData = new FormData();
-    console.log(formData.append("file", _documents));
     openAuction();
   };
   function close() {
@@ -144,7 +143,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 <div className="w-full">
                   <Input
                     value={_price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => setPrice(Number(e.target.value))}
                     type="number"
                     className={clsx(
                       "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
@@ -153,14 +152,13 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                   />
                 </div>
               </div>
-              {_price}
               <p className="text-sm/6 font-medium text-white">Gap Bid</p>
               <div className="flex flex-row gap-5">
                 <div className="justify-center content-center">$ETH</div>
                 <div className="w-full">
                   <Input
                     value={_gapBid}
-                    onChange={(e) => setGapBid(e.target.value)}
+                    onChange={(e) => setGapBid(Number(e.target.value))}
                     type="number"
                     className={clsx(
                       "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",

@@ -28,7 +28,7 @@ interface CardProps {
 
 const CardAuction = (props: CardProps) => {
   return (
-    <div className="w-full max-w-lg px-4" key={props.index}>
+    <div className="w-full max-w-lg px-4">
       <Fieldset className="space-y-6 rounded-xl dark:bg-white/5 bg-indigo-800/5 p-6 sm:p-10">
         <Legend className="text-2xl text-center font-semibold text-gray-700 dark:text-gray-100">
           {props.name}
@@ -46,7 +46,7 @@ const CardAuction = (props: CardProps) => {
         </Field>
         <Field>
           <Label className="text-sm/6 font-medium  text-gray-700 dark:text-gray-100/50">
-            {props.type}
+            {props.type ? props.type : "NFT"}
           </Label>
           <Description className="text-sm/6  text-gray-700/50 dark:text-gray-100/50">
             Seller: {props.seller}
@@ -70,7 +70,7 @@ const CardAuction = (props: CardProps) => {
             {props.startDate} - {props.endDate}{" "}
             {props.isEnded ? "(Ended)" : "(Ongoing)"}
           </Description>
-          <BidModal index={props.index} />
+          <BidModal id={props.index} />
         </Field>
       </Fieldset>
     </div>
