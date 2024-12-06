@@ -11,10 +11,9 @@ import {
 } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { ConnectButton, PayEmbed, useSendTransaction } from "thirdweb/react";
+import { useSendTransaction } from "thirdweb/react";
 import { prepareContractCall, toWei } from "thirdweb";
-import { client, contract } from "../../app/client";
-import { defineChain } from "thirdweb/chains";
+import { contract } from "../../app/client";
 interface IBidModal {
   id: number;
 }
@@ -59,7 +58,7 @@ const BidModal = (props: IBidModal) => {
       value: toWei(bid),
       params: [BigInt(props.id)],
     });
-    console.log(transaction)
+    console.log(transaction);
     sendTransaction(transaction);
   };
   const sendToBid = (e: any) => {
