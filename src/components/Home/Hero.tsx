@@ -5,7 +5,7 @@ import heroImg from "../../../public/img/hero.png";
 import Link from "next/link";
 const Hero = () => {
   return (
-    <>
+    <div data-aos="fade-up">
     <Container className="flex flex-wrap ">
       <div className="flex items-center w-full lg:w-1/2">
         <div className="max-w-2xl mb-8">
@@ -77,7 +77,7 @@ const Hero = () => {
       </div>
     </div>
   </Container>
-  </>
+  </div>
   );
 };
 

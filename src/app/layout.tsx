@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/Footer";
 import { PopupWidget } from "@/components/PopupWidget";
-
+import Animationing from "./animationing";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,13 +23,20 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <ThirdwebProvider>
-        <body className={inter.className + " bg-white dark:bg-slate-900 transition-all duration-300"}>
-          <ThemeProvider attribute="class">
-            <Navbar />
-            <div>{children}</div>
-            <Footer />
-            <PopupWidget />
-          </ThemeProvider>
+        <body
+          className={
+            inter.className +
+            " bg-white dark:bg-slate-900 transition-all duration-300"
+          }
+        >
+          <Animationing>
+            <ThemeProvider attribute="class">
+              <Navbar />
+              <div>{children}</div>
+              <Footer />
+              <PopupWidget />
+            </ThemeProvider>
+          </Animationing>
         </body>
       </ThirdwebProvider>
     </html>
