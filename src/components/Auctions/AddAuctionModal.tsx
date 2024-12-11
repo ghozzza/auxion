@@ -12,6 +12,8 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { prepareContractCall } from "thirdweb";
 import { useSendTransaction } from "thirdweb/react";
 import { contract } from "../../app/client";
+import { useRouter } from "next/navigation";
+import { refreshPostPage } from "@/app/auctions/page";
 
 interface IAddAuctionModal {
   isOpen: boolean;
@@ -21,7 +23,7 @@ interface IAddAuctionModal {
 const AddAuctionModal = (props: IAddAuctionModal) => {
   const [_name, setName] = useState<string>("");
   const [_documents, setDocuments] = useState<any>("");
-  const [_typeDocuments, setTypeDocuments] = useState<string>("");
+  const [_typeDocuments, setTypeDocuments] = useState<string>("NFT");
   const [_price, setPrice] = useState<number>(0);
   const [_gapBid, setGapBid] = useState<number>(0);
   const [_startDate, setStartDate] = useState<number | null>(null);

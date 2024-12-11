@@ -25,8 +25,12 @@ interface CardProps {
   startDate: number;
   endDate: number;
 }
-
 const CardAuction = (props: CardProps) => {
+  const localDate = new Date(); // Convert string to Date object
+  const utcTimestamp = localDate.getTime();
+  const convertDate = (date: number) => {
+    return new Date(date).toLocaleDateString("en-US");
+  };
   return (
     <div className="w-full max-w-lg px-4">
       <Fieldset className="space-y-6 rounded-xl dark:bg-white/5 bg-indigo-800/5 p-6 sm:p-10">
@@ -67,8 +71,13 @@ const CardAuction = (props: CardProps) => {
             </Label>
           </div>
           <Description className="text-sm/6 text-gray-700 dark:text-gray-100 mt-5">
-            {props.startDate} - {props.endDate}{" "}
-            {props.isEnded ? "(Ended)" : "(Ongoing)"}
+            {convertDate(props.startDate)} - {convertDate(props.endDate)}{" "}
+            {props.isEnded || Date.now() > props.endDate
+              ? "(Ended)"
+              : "(Ongoing)"}
+            {props.startDate} || 
+            {utcTimestamp}
+            {utcTimestamp > props.startDate ? "mulai" : "belum"}
           </Description>
           <BidModal id={props.index} />
         </Field>

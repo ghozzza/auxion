@@ -2,7 +2,7 @@ import { useReadContract } from "thirdweb/react";
 import { contract } from "../../app/client";
 import CardAuction from "@/components/Auctions/CardAuction";
 import heroImg from "../../../public/img/hero.png";
-import Loading from "@/components/loading";
+import Loading from "@/components/Loading";
 
 const GetCardAuction = ({ id }: { id: number }) => {
   const { data, isPending } = useReadContract({

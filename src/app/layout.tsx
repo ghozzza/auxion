@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import { ThemeProvider } from "next-themes";
 import { Footer } from "@/components/Footer";
 import { PopupWidget } from "@/components/PopupWidget";
-import Animationing from "./animationing";
+import Animationing from "./Animationing";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

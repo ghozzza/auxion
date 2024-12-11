@@ -4,6 +4,7 @@ import React from "react";
 import AuctionsHeader from "@/components/Auctions/AuctionsHeader";
 import readId from "../utils/readId";
 import GetCardAuction from "../../components/Auctions/GetCardAuction";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   return (
@@ -11,13 +12,18 @@ const Page = () => {
       <AuctionsHeader />
       <div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols gap-4">
         {Array.from({ length: Number(readId()?.toString()) }).map((_, i) => (
-          <p>
+          <div key={i}>
             <GetCardAuction id={i} />
-          </p>
+          </div>
         ))}
       </div>
     </Container>
   );
+};
+
+export const refreshPostPage = () => {
+  const router = useRouter();
+  router.refresh();
 };
 
 export default Page;

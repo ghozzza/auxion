@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import React from "react";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { contract } from "../client";
-import Loading from "@/components/loading";
+import Loading from "@/components/Loading";
 
 const Balance = () => {
   const profile = useActiveAccount();
@@ -32,9 +32,5 @@ const useGetBalance = (profile: any) => {
 
   return { data, isPending };
 };
-
-// function balances() {
-
-// }
 
 export default Balance;

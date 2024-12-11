@@ -1,4 +1,3 @@
-// "use client";
 import {
   Button,
   Description,
@@ -51,16 +50,31 @@ const BidModal = (props: IBidModal) => {
     setIsOpen(false);
   }
   const { mutate: sendTransaction } = useSendTransaction();
+
   const processTransaction = async () => {
-    const transaction = prepareContractCall({
-      contract,
-      method: "function bid(uint256 _id) payable",
-      value: toWei(bid),
-      params: [BigInt(props.id)],
-    });
-    console.log(transaction);
-    sendTransaction(transaction);
+    try {
+      // Explicitly prepare the transaction
+      const transaction = prepareContractCall({
+        contract,
+        method: "function bid(uint256 _id) payable",
+        value: toWei(bid),
+        params: [BigInt(props.id)],
+      });
+      // Use sendTransaction with additional options
+      await sendTransaction(transaction, {
+        onError: (error) => {
+          console.error("Transaction error:", error);
+        },
+        onSuccess: (result) => {
+          console.log("Transaction successful", result);
+          close();
+        },
+      });
+    } catch (error) {
+      console.error("Bid preparation error:", error);
+    }
   };
+
   const sendToBid = (e: any) => {
     e.preventDefault();
     console.log(bid, toWei(bid));
