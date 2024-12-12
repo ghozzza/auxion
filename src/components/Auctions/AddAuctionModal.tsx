@@ -12,8 +12,6 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { prepareContractCall } from "thirdweb";
 import { useSendTransaction } from "thirdweb/react";
 import { contract } from "../../app/client";
-import { useRouter } from "next/navigation";
-import { refreshPostPage } from "@/app/auctions/page";
 
 interface IAddAuctionModal {
   isOpen: boolean;
@@ -26,8 +24,8 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
   const [_typeDocuments, setTypeDocuments] = useState<string>("NFT");
   const [_price, setPrice] = useState<number>(0);
   const [_gapBid, setGapBid] = useState<number>(0);
-  const [_startDate, setStartDate] = useState<number | null>(null);
-  const [_endDate, setEndDate] = useState<number | null>(null);
+  const [_startDate, setStartDate] = useState<number | null>(0);
+  const [_endDate, setEndDate] = useState<number | null>(0);
 
   const { mutate: sendTransaction } = useSendTransaction();
   const toGMT7ISOString = (timestamp: any) => {
@@ -51,6 +49,15 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
     setDocuments(file);
   };
   const openAuction = () => {
+    console.log(
+      _name,
+      _documents.name,
+      _typeDocuments,
+      BigInt(_price * 10 ** 18),
+      BigInt(_gapBid * 10 ** 18),
+      BigInt((_endDate ? Math.floor(_endDate / 1000) : 0).toString()),
+      BigInt((_endDate ? Math.floor(_endDate / 1000) : 0).toString())
+    );
     const transaction = prepareContractCall({
       contract,
       method:
@@ -61,8 +68,8 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
         _typeDocuments,
         BigInt(_price * 10 ** 18),
         BigInt(_gapBid * 10 ** 18),
-        BigInt(_startDate ?? 0),
-        BigInt(_endDate ?? 0),
+        BigInt((_startDate ? Math.floor(_startDate / 1000) : 0)),
+        BigInt((_endDate ? Math.floor(_endDate / 1000) : 0)),
       ],
     });
     sendTransaction(transaction);
@@ -99,6 +106,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
               </DialogTitle>
               <p className="text-sm/6 font-medium text-white">Product Name</p>
               <Input
+                defaultValue={""}
                 type="text"
                 value={_name}
                 onChange={(e) => setName(e.target.value)}
@@ -109,6 +117,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
               />
               <p className="text-sm/6 font-medium text-white">Documents</p>
               <Input
+                defaultValue={""}
                 type="file"
                 accept=".jpg,.jpeg,.png"
                 onChange={handleImageUpload}
@@ -144,6 +153,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 <div className="justify-center content-center">$ETH</div>
                 <div className="w-full">
                   <Input
+                    defaultValue={""}
                     value={_price}
                     onChange={(e) => setPrice(Number(e.target.value))}
                     type="number"
@@ -159,6 +169,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 <div className="justify-center content-center">$ETH</div>
                 <div className="w-full">
                   <Input
+                    defaultValue={""}
                     value={_gapBid}
                     onChange={(e) => setGapBid(Number(e.target.value))}
                     type="number"
@@ -174,6 +185,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 Start Date (GMT +7)
               </p>
               <Input
+                defaultValue={""}
                 value={_startDate ? toGMT7ISOString(_startDate) : ""}
                 onChange={handleStartDateChange}
                 type="datetime-local"
@@ -186,6 +198,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 End Date (GMT +7)
               </p>
               <Input
+                defaultValue={""}
                 value={_endDate ? toGMT7ISOString(_endDate) : ""}
                 onChange={handleEndDateChange}
                 type="datetime-local"

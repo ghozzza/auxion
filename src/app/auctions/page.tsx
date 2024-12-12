@@ -4,7 +4,6 @@ import React from "react";
 import AuctionsHeader from "@/components/Auctions/AuctionsHeader";
 import readId from "../utils/readId";
 import GetCardAuction from "../../components/Auctions/GetCardAuction";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
   return (
@@ -19,11 +18,6 @@ const Page = () => {
       </div>
     </Container>
   );
-};
-
-export const refreshPostPage = () => {
-  const router = useRouter();
-  router.refresh();
 };
 
 export default Page;

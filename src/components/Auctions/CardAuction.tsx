@@ -28,9 +28,21 @@ interface CardProps {
 const CardAuction = (props: CardProps) => {
   const localDate = new Date(); // Convert string to Date object
   const utcTimestamp = localDate.getTime();
-  const convertDate = (date: number) => {
-    return new Date(date).toLocaleDateString("en-US");
+
+  const convertDateTime = (date: number) => {
+    const dateConvert = new Date(date * 1000);
+    const hours = dateConvert.getHours();
+    const minutes = "0" + dateConvert.getMinutes();
+    const formattedTime = hours + ":" + minutes.substr(-2);
+    const formattedDate = new Date(date * 1000).toLocaleDateString("en-US");
+
+    return `${formattedDate} ${formattedTime}`;
   };
+
+  const convertTimeStamp = (date: number) => {
+    return Math.floor(date / 1000);
+  };
+
   return (
     <div className="w-full max-w-lg px-4">
       <Fieldset className="space-y-6 rounded-xl dark:bg-white/5 bg-indigo-800/5 p-6 sm:p-10">
@@ -71,15 +83,13 @@ const CardAuction = (props: CardProps) => {
             </Label>
           </div>
           <Description className="text-sm/6 text-gray-700 dark:text-gray-100 mt-5">
-            {convertDate(props.startDate)} - {convertDate(props.endDate)}{" "}
-            {props.isEnded || Date.now() > props.endDate
+            {convertDateTime(props.startDate)} -{" "}
+            {convertDateTime(props.endDate)}{" "}
+            {props.isEnded || convertTimeStamp(Date.now()) > props.endDate
               ? "(Ended)"
               : "(Ongoing)"}
-            {props.startDate} || 
-            {utcTimestamp}
-            {utcTimestamp > props.startDate ? "mulai" : "belum"}
           </Description>
-          <BidModal id={props.index} />
+          <BidModal id={props.index} disabled={props.isEnded || convertTimeStamp(Date.now()) > props.endDate ? true : false} />
         </Field>
       </Fieldset>
     </div>

@@ -15,6 +15,7 @@ import { prepareContractCall, toWei } from "thirdweb";
 import { contract } from "../../app/client";
 interface IBidModal {
   id: number;
+  disabled: boolean;
 }
 
 const fetchData = async (url: string): Promise<any> => {
@@ -85,8 +86,14 @@ const BidModal = (props: IBidModal) => {
   return (
     <>
       <Button
+        disabled={props.disabled}
         onClick={open}
-        className="rounded dark:bg-indigo-500 bg-indigo-900 py-2 px-4 text-sm text-gray-100 dark:text-gray-100 data-[hover]:bg-indigo-400 data-[hover]:data-[active]:bg-indigo-300 w-full mt-5 duration-300"
+        className={
+          (props.disabled
+            ? "bg-slate-600 cursor-not-allowed"
+            : "dark:bg-indigo-500 bg-indigo-900 data-[hover]:bg-indigo-400 data-[hover]:data-[active]:bg-indigo-300") +
+          " rounded  py-2 px-4 text-sm text-gray-100 dark:text-gray-100  w-full mt-5 duration-300"
+        }
       >
         Bid
       </Button>

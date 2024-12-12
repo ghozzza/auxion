@@ -14,7 +14,7 @@ export function Footer() {
     { id: 4, name: "About", url: "/about" },
   ];
   return (
-    <div className="relative" data-aos="fade-up">
+    <div className="relative" data-aos="zoom-in">
       <Container>
         <div className="grid max-w-screen-xl grid-cols-1 gap-10 pt-10 mx-auto mt-5 border-t border-gray-100 dark:border-trueGray-700 lg:grid-cols-5">
           <div className="lg:col-span-2">

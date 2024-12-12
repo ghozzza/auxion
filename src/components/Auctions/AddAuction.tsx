@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import {
   Button,
 } from "@headlessui/react";
-import clsx from "clsx";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import AddAuctionModal from "./AddAuctionModal";
 
 const AddAuction = () => {
