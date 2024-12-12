@@ -12,6 +12,7 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { prepareContractCall } from "thirdweb";
 import { useSendTransaction } from "thirdweb/react";
 import { contract } from "../../app/client";
+import toast, { Toaster } from "react-hot-toast";
 
 interface IAddAuctionModal {
   isOpen: boolean;
@@ -49,15 +50,11 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
     setDocuments(file);
   };
   const openAuction = () => {
-    console.log(
-      _name,
-      _documents.name,
-      _typeDocuments,
-      BigInt(_price * 10 ** 18),
-      BigInt(_gapBid * 10 ** 18),
-      BigInt((_endDate ? Math.floor(_endDate / 1000) : 0).toString()),
-      BigInt((_endDate ? Math.floor(_endDate / 1000) : 0).toString())
-    );
+    toast.loading("Waiting...", {
+      duration: 5000,
+      position: "top-right",
+    });
+
     const transaction = prepareContractCall({
       contract,
       method:
@@ -73,154 +70,166 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
       ],
     });
     sendTransaction(transaction);
-    close();
+
+    toast.success("Success", {
+      duration: 5000,
+      position: "top-right",
+    });
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!_documents) return;
     const formData = new FormData();
     openAuction();
+    close();
   };
   function close() {
     props.setIsOpen(false);
   }
   return (
-    <Dialog
-      open={props.isOpen}
-      as="div"
-      className="relative z-10 focus:outline-none"
-      onClose={close}
-    >
-      <form onSubmit={handleSubmit}>
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              transition
-              className="w-full max-w-md rounded-xl bg-white/20 bg-white/ p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
-              <DialogTitle
-                as="h3"
-                className="text-base/7 font-medium text-white text-center"
-              >
-                Add Auction
-              </DialogTitle>
-              <p className="text-sm/6 font-medium text-white">Product Name</p>
-              <Input
-                defaultValue={""}
-                type="text"
-                value={_name}
-                onChange={(e) => setName(e.target.value)}
-                className={clsx(
-                  "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                  "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                )}
-              />
-              <p className="text-sm/6 font-medium text-white">Documents</p>
-              <Input
-                defaultValue={""}
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                onChange={handleImageUpload}
-                //   (e) => setDocuments(e?.target?.files?.[0]?.name || "")
-                className={clsx(
-                  "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                  "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                )}
-              />
-              <p className="text-sm/6 font-medium text-white">Type</p>
-              <div className="relative">
-                <Select
-                  defaultValue={"Others"}
-                  value={_typeDocuments ?? "Others"}
-                  onChange={(e) => setTypeDocuments(e.target.value)}
-                  className={clsx(
-                    "mt-2 block w-full appearance-none rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
-                    "*:text-black"
-                  )}
-                >
-                  <option value="NFT">NFT</option>
-                  <option value="RWA">RWA</option>
-                  <option value="Others">Others</option>
-                </Select>
-                <ChevronDownIcon
-                  className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-white/60"
-                  aria-hidden="true"
-                />
-              </div>
-              <p className="text-sm/6 font-medium text-white">Start Bid</p>
-              <div className="flex flex-row gap-5">
-                <div className="justify-center content-center">$ETH</div>
-                <div className="w-full">
-                  <Input
-                    defaultValue={""}
-                    value={_price}
-                    onChange={(e) => setPrice(Number(e.target.value))}
-                    type="number"
-                    className={clsx(
-                      "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                  />
-                </div>
-              </div>
-              <p className="text-sm/6 font-medium text-white">Gap Bid</p>
-              <div className="flex flex-row gap-5">
-                <div className="justify-center content-center">$ETH</div>
-                <div className="w-full">
-                  <Input
-                    defaultValue={""}
-                    value={_gapBid}
-                    onChange={(e) => setGapBid(Number(e.target.value))}
-                    type="number"
-                    className={clsx(
-                      "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                    )}
-                  />
-                </div>
-              </div>
+    <div>
+      <Toaster />
 
-              <p className="text-sm/6 font-medium text-white">
-                Start Date (GMT +7)
-              </p>
-              <Input
-                defaultValue={""}
-                value={_startDate ? toGMT7ISOString(_startDate) : ""}
-                onChange={handleStartDateChange}
-                type="datetime-local"
-                className={clsx(
-                  "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                  "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                )}
-              />
-              <p className="text-sm/6 font-medium text-white">
-                End Date (GMT +7)
-              </p>
-              <Input
-                defaultValue={""}
-                value={_endDate ? toGMT7ISOString(_endDate) : ""}
-                onChange={handleEndDateChange}
-                type="datetime-local"
-                className={clsx(
-                  "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
-                  "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
-                )}
-              />
-              <div className="mt-4">
-                <Button
-                  className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
-                  //   onClick={openAuction}
-                  type="submit"
+      <Dialog
+        open={props.isOpen}
+        as="div"
+        className="relative z-10 focus:outline-none"
+        onClose={close}
+      >
+        <form onSubmit={handleSubmit}>
+          asfadgfsd
+          <button type="submit">cek</button>
+        </form>
+        <form onSubmit={handleSubmit}>
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <DialogPanel
+                transition
+                className="w-full max-w-md rounded-xl bg-white/20 bg-white/ p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              >
+                <DialogTitle
+                  as="h3"
+                  className="text-base/7 font-medium text-white text-center"
                 >
-                  Confirm
-                </Button>
-              </div>
-            </DialogPanel>
+                  Add Auction
+                </DialogTitle>
+                <p className="text-sm/6 font-medium text-white">Product Name</p>
+                <Input
+                  defaultValue={""}
+                  type="text"
+                  value={_name}
+                  onChange={(e) => setName(e.target.value)}
+                  className={clsx(
+                    "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                  )}
+                />
+                <p className="text-sm/6 font-medium text-white">Documents</p>
+                <Input
+                  defaultValue={""}
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={handleImageUpload}
+                  className={clsx(
+                    "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                  )}
+                />
+                <p className="text-sm/6 font-medium text-white">Type</p>
+                <div className="relative">
+                  <Select
+                    defaultValue={"Others"}
+                    value={_typeDocuments ?? "Others"}
+                    onChange={(e) => setTypeDocuments(e.target.value)}
+                    className={clsx(
+                      "mt-2 block w-full appearance-none rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                      "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+                      "*:text-black"
+                    )}
+                  >
+                    <option value="NFT">NFT</option>
+                    <option value="RWA">RWA</option>
+                    <option value="Others">Others</option>
+                  </Select>
+                  <ChevronDownIcon
+                    className="group pointer-events-none absolute top-2.5 right-2.5 size-4 fill-white/60"
+                    aria-hidden="true"
+                  />
+                </div>
+                <p className="text-sm/6 font-medium text-white">Start Bid</p>
+                <div className="flex flex-row gap-5">
+                  <div className="justify-center content-center">$ETH</div>
+                  <div className="w-full">
+                    <Input
+                      defaultValue={""}
+                      value={_price}
+                      onChange={(e) => setPrice(Number(e.target.value))}
+                      type="number"
+                      className={clsx(
+                        "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                    />
+                  </div>
+                </div>
+                <p className="text-sm/6 font-medium text-white">Gap Bid</p>
+                <div className="flex flex-row gap-5">
+                  <div className="justify-center content-center">$ETH</div>
+                  <div className="w-full">
+                    <Input
+                      defaultValue={""}
+                      value={_gapBid}
+                      onChange={(e) => setGapBid(Number(e.target.value))}
+                      type="number"
+                      className={clsx(
+                        "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                        "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <p className="text-sm/6 font-medium text-white">
+                  Start Date (GMT +7)
+                </p>
+                <Input
+                  defaultValue={""}
+                  value={_startDate ? toGMT7ISOString(_startDate) : ""}
+                  onChange={handleStartDateChange}
+                  type="datetime-local"
+                  className={clsx(
+                    "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                  )}
+                />
+                <p className="text-sm/6 font-medium text-white">
+                  End Date (GMT +7)
+                </p>
+                <Input
+                  defaultValue={""}
+                  value={_endDate ? toGMT7ISOString(_endDate) : ""}
+                  onChange={handleEndDateChange}
+                  type="datetime-local"
+                  className={clsx(
+                    "mt-2 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white mb-2",
+                    "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                  )}
+                />
+                <div className="mt-4">
+                  <Button
+                    className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                    //   onClick={openAuction}
+                    type="submit"
+                  >
+                    Confirm
+                  </Button>
+                </div>
+              </DialogPanel>
+            </div>
           </div>
-        </div>
-      </form>
-    </Dialog>
+        </form>
+      </Dialog>
+    </div>
   );
 };
 

@@ -54,7 +54,6 @@ const BidModal = (props: IBidModal) => {
 
   const processTransaction = async () => {
     try {
-      // Explicitly prepare the transaction
       const transaction = prepareContractCall({
         contract,
         method: "function bid(uint256 _id) payable",
