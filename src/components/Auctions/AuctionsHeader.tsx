@@ -9,9 +9,12 @@ const AuctionsHeader = () => {
   const [filter3, setFilter3] = useState(false);
 
   return (
-    <div className="grid grid-cols-3 gap-4 justify-between mb-5 content-center">
+    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 xl:justify-between xl:mb-5 content-center justify-center">
+      <div className="xl:hidden w-full">
+        <h1 className="text-4xl text-bold text-center">Auctions</h1>
+      </div>
       <div>
-        <div className="w-[31.33rem] max-w-xl px-4">
+        <div className="w-full justify-center content-center xl:w-[31.33rem] xl:max-w-xl px-4 justify-self-center mx-auto">
           <Field>
             <Input
               type="text"
@@ -24,10 +27,38 @@ const AuctionsHeader = () => {
           </Field>
         </div>
       </div>
-      <div>
+      <div className="px-4 block xl:hidden w-full">
+        <div className="grid grid-cols-3 w-full h-12 text-center justify-center content-center rounded-lg">
+          <div
+            className={`${
+              filter1 ? "bg-indigo-500" : "bg-white/5"
+            } hover:bg-slate-500 py-3 duration-300 rounded-l-lg border-[1px] border-black cursor-pointer`}
+            onClick={() => setFilter1(!filter1)}
+          >
+            <p>NFT</p>
+          </div>
+          <div
+            className={`${
+              filter2 ? "bg-indigo-500" : "bg-white/5"
+            } hover:bg-slate-500 py-3 duration-300 border-[1px] border-black cursor-pointer`}
+            onClick={() => setFilter2(!filter2)}
+          >
+            <p>RWA</p>
+          </div>
+          <div
+            className={`${
+              filter3 ? "bg-indigo-500" : "bg-white/5"
+            } hover:bg-slate-500 py-3 duration-300 rounded-r-lg border-[1px] border-black cursor-pointer`}
+            onClick={() => setFilter3(!filter3)}
+          >
+            <p>Others</p>
+          </div>
+        </div>
+      </div>
+      <div className="hidden xl:block">
         <h1 className="text-4xl text-bold text-center">Auctions</h1>
       </div>
-      <div className="px-4">
+      <div className="px-4 hidden xl:block">
         <div className="grid grid-cols-3 w-[29rem] h-12 text-center justify-center content-center rounded-lg">
           <div
             className={`${
@@ -55,7 +86,7 @@ const AuctionsHeader = () => {
           </div>
         </div>
       </div>
-      <div className="col-span-3 content-center text-center">
+      <div className="xl:col-span-3 content-center text-center xl:mb-0 mb-5">
         <AddAuction />
       </div>
     </div>

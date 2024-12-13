@@ -19,38 +19,27 @@ interface IBidModal {
   disabled: boolean;
 }
 
-const fetchData = async (url: string): Promise<any> => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Fetch error: ", error);
-    throw error;
-  }
-};
-// Usage
-
 const BidModal = (props: IBidModal) => {
   const [isOpen, setIsOpen] = useState(false);
   const [bid, setBid] = useState<any>(null);
   const [convert, setConvert] = useState<any>(null);
+
   useEffect(() => {
     fetchData("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
       .then((data) => setConvert(data))
       .catch((error) => console.error("Error:", error));
   }, [bid]);
+
   function open() {
     setIsOpen(true);
   }
+
   function close() {
     setBid(null);
     setConvert(null);
     setIsOpen(false);
   }
+
   const { mutate: sendTransaction } = useSendTransaction();
 
   const processTransaction = async () => {
@@ -61,7 +50,6 @@ const BidModal = (props: IBidModal) => {
         value: toWei(bid),
         params: [BigInt(props.id)],
       });
-      // Use sendTransaction with additional options
       sendTransaction(transaction, {
         onError: (error) => {
           console.error("Transaction error:", error);
@@ -73,7 +61,7 @@ const BidModal = (props: IBidModal) => {
         onSuccess: (result) => {
           console.log("Transaction successful", result);
           toast.success(
-            `Success! Transaction Hash: ${result.transactionHash}`,
+            `Success!`,
             {
               duration: 5000,
               position: "top-right",
@@ -101,7 +89,7 @@ const BidModal = (props: IBidModal) => {
           (props.disabled
             ? "bg-slate-600 cursor-not-allowed"
             : "dark:bg-indigo-500 bg-indigo-900 data-[hover]:bg-indigo-400 data-[hover]:data-[active]:bg-indigo-300") +
-          " rounded  py-2 px-4 text-sm text-gray-100 dark:text-gray-100  w-full mt-5 duration-300"
+          " rounded  py-2 px-4 text-sm text-gray-100 dark:text-gray-100 w-full mt-5 duration-300"
         }
       >
         Bid
@@ -171,5 +159,17 @@ const BidModal = (props: IBidModal) => {
     </>
   );
 };
-
+const fetchData = async (url: string): Promise<any> => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error: ", error);
+    throw error;
+  }
+};
 export default BidModal;

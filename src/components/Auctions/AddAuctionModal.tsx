@@ -79,7 +79,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
       },
       onSuccess: (result) => {
         console.log("Transaction successful", result);
-        toast.success(`Success! Transaction Hash: ${result.transactionHash}`, {
+        toast.success(`Success!`, {
           duration: 5000,
           position: "top-right",
         });

@@ -9,7 +9,7 @@ const Page = () => {
   return (
     <Container>
       <AuctionsHeader />
-      <div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols gap-4">
+      <div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
         {Array.from({ length: Number(readId()?.toString()) }).map((_, i) => (
           <div key={i}>
             <GetCardAuction id={i} />

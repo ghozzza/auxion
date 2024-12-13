@@ -65,7 +65,7 @@ const Balance = () => {
       },
       onSuccess: (result) => {
         console.log("Transaction successful", result);
-        toast.success(`Success! Transaction Hash: ${result.transactionHash}`, {
+        toast.success(`Success!`, {
           duration: 5000,
           position: "top-right",
         });
@@ -78,24 +78,24 @@ const Balance = () => {
       <Toaster />
       <div data-aos="zoom-in" className="mb-[9rem]">
         <Container>
-          <div className="border-2 border-indigo-300 px-10 py-10 rounded-lg mx-[26rem] border-opacity-25">
-            <h1 className="text-4xl font-bold text-gray-500 dark:text-gray-100 text-center">
+          <div className="border-2 border-indigo-300 px-10 py-10 rounded-lg xl:mx-[26rem] mx-auto border-opacity-25">
+            <h1 className="xl:text-4xl font-bold text-gray-500 dark:text-gray-100 text-center">
               Balance
             </h1>
-            <h1 className="text-lg text-gray-500 dark:text-gray-100 opacity-35 mb-5 text-center">
+            <h1 className="xl:text-lg text-gray-500 dark:text-gray-100 opacity-35 mb-5 text-center">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad,
               laborum.
             </h1>
-            <h1 className="text-3xl font-bold text-gray-500 dark:text-gray-100 text-center">
+            <h1 className="xl:text-3xl text-md font-bold text-gray-500 dark:text-gray-100 text-center">
               Your Address:
             </h1>
-            <h1 className="text-lg text-gray-500 dark:text-gray-100 mb-5 text-center">
+            <h1 className="xl:text-lg text-[10px] text-gray-500 dark:text-gray-100 mb-5 text-center">
               {profile?.address ? profile.address : ""}
             </h1>
-            <h1 className="text-3xl font-bold text-gray-500 dark:text-gray-100 text-center">
+            <h1 className="xl:text-3xl text-md font-bold text-gray-500 dark:text-gray-100 text-center">
               Current Balance:
             </h1>
-            <h1 className="text-lg text-gray-500 dark:text-gray-100 text-center mb-5">
+            <h1 className="xl:text-lg text-md text-gray-500 dark:text-gray-100 text-center mb-5">
               {isPending ? (
                 <div className="mt-5">
                   <Loading />
