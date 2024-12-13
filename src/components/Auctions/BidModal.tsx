@@ -13,6 +13,7 @@ import clsx from "clsx";
 import { useSendTransaction } from "thirdweb/react";
 import { prepareContractCall, toWei } from "thirdweb";
 import { contract } from "../../app/client";
+import toast from "react-hot-toast";
 interface IBidModal {
   id: number;
   disabled: boolean;
@@ -61,12 +62,23 @@ const BidModal = (props: IBidModal) => {
         params: [BigInt(props.id)],
       });
       // Use sendTransaction with additional options
-      await sendTransaction(transaction, {
+      sendTransaction(transaction, {
         onError: (error) => {
           console.error("Transaction error:", error);
+          toast.error(`Error! ${error.message}`, {
+            duration: 5000,
+            position: "top-right",
+          });
         },
         onSuccess: (result) => {
           console.log("Transaction successful", result);
+          toast.success(
+            `Success! Transaction Hash: ${result.transactionHash}`,
+            {
+              duration: 5000,
+              position: "top-right",
+            }
+          );
           close();
         },
       });
@@ -77,9 +89,7 @@ const BidModal = (props: IBidModal) => {
 
   const sendToBid = (e: any) => {
     e.preventDefault();
-    console.log(bid, toWei(bid));
     processTransaction();
-    console.log(bid, toWei(bid));
     close();
   };
   return (

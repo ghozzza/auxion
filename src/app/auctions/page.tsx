@@ -3,7 +3,7 @@ import Container from "@/components/Container";
 import React from "react";
 import AuctionsHeader from "@/components/Auctions/AuctionsHeader";
 import readId from "../utils/readId";
-import GetCardAuction from "../../components/Auctions/GetCardAuction";
+import GetCardAuction from "@/components/Auctions/GetCardAuction";
 
 const Page = () => {
   return (

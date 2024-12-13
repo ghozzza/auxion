@@ -65,15 +65,26 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
         _typeDocuments,
         BigInt(_price * 10 ** 18),
         BigInt(_gapBid * 10 ** 18),
-        BigInt((_startDate ? Math.floor(_startDate / 1000) : 0)),
-        BigInt((_endDate ? Math.floor(_endDate / 1000) : 0)),
+        BigInt(_startDate ? Math.floor(_startDate / 1000) : 0),
+        BigInt(_endDate ? Math.floor(_endDate / 1000) : 0),
       ],
     });
-    sendTransaction(transaction);
-
-    toast.success("Success", {
-      duration: 5000,
-      position: "top-right",
+    sendTransaction(transaction, {
+      onError: (error) => {
+        console.error("Transaction error:", error);
+        toast.error(`Error! ${error.message}`, {
+          duration: 5000,
+          position: "top-right",
+        });
+      },
+      onSuccess: (result) => {
+        console.log("Transaction successful", result);
+        toast.success(`Success! Transaction Hash: ${result.transactionHash}`, {
+          duration: 5000,
+          position: "top-right",
+        });
+        close();
+      },
     });
   };
   const handleSubmit = async (e: any) => {
@@ -115,7 +126,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 </DialogTitle>
                 <p className="text-sm/6 font-medium text-white">Product Name</p>
                 <Input
-                  defaultValue={""}
                   type="text"
                   value={_name}
                   onChange={(e) => setName(e.target.value)}
@@ -126,7 +136,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 />
                 <p className="text-sm/6 font-medium text-white">Documents</p>
                 <Input
-                  defaultValue={""}
                   type="file"
                   accept=".jpg,.jpeg,.png"
                   onChange={handleImageUpload}
@@ -138,7 +147,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 <p className="text-sm/6 font-medium text-white">Type</p>
                 <div className="relative">
                   <Select
-                    defaultValue={"Others"}
                     value={_typeDocuments ?? "Others"}
                     onChange={(e) => setTypeDocuments(e.target.value)}
                     className={clsx(
@@ -161,7 +169,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                   <div className="justify-center content-center">$ETH</div>
                   <div className="w-full">
                     <Input
-                      defaultValue={""}
                       value={_price}
                       onChange={(e) => setPrice(Number(e.target.value))}
                       type="number"
@@ -177,7 +184,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                   <div className="justify-center content-center">$ETH</div>
                   <div className="w-full">
                     <Input
-                      defaultValue={""}
                       value={_gapBid}
                       onChange={(e) => setGapBid(Number(e.target.value))}
                       type="number"
@@ -193,7 +199,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                   Start Date (GMT +7)
                 </p>
                 <Input
-                  defaultValue={""}
                   value={_startDate ? toGMT7ISOString(_startDate) : ""}
                   onChange={handleStartDateChange}
                   type="datetime-local"
@@ -206,7 +211,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                   End Date (GMT +7)
                 </p>
                 <Input
-                  defaultValue={""}
                   value={_endDate ? toGMT7ISOString(_endDate) : ""}
                   onChange={handleEndDateChange}
                   type="datetime-local"
