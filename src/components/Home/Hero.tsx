@@ -25,7 +25,7 @@ const Hero = () => {
 
             <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
               <Link
-                href="https://sepolia-blockscout.lisk.com/address/0x96588D0Ea7E21cd685DbD71DCCaEb5519A759e28"
+                href="https://optimism-sepolia.blockscout.com/address/0x4CA9964bA32016F6Ba043Bfefc17BFf45E73469e"
                 target="_blank"
                 rel="noopener"
                 className="flex items-center space-x-2 gap-1 px-8 py-4 text-sm xl:text-lg font-medium text-center text-white bg-indigo-600 rounded-md "
