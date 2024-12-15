@@ -1,6 +1,4 @@
 "use client";
-// import { useReadContract } from "thirdweb/react";
-// import { contract } from "./client";
 import Hero from "@/components/Home/Hero";
 import SectionTitle from "@/components/Home/SectionTitle";
 import { Benefits } from "@/components/Home/Benefits";

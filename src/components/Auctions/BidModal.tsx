@@ -10,19 +10,25 @@ import {
 } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { useSendTransaction } from "thirdweb/react";
-import { prepareContractCall, toWei } from "thirdweb";
+import { useActiveAccount, useSendTransaction } from "thirdweb/react";
+import {
+  prepareContractCall,
+  toWei,
+} from "thirdweb";
 import { contract } from "../../app/client";
 import toast from "react-hot-toast";
 interface IBidModal {
   id: number;
   disabled: boolean;
+  gapBid: number;
+  highestBid: number;
+  seller: string;
 }
-
 const BidModal = (props: IBidModal) => {
   const [isOpen, setIsOpen] = useState(false);
   const [bid, setBid] = useState<any>(null);
   const [convert, setConvert] = useState<any>(null);
+  const profile = useActiveAccount();
 
   useEffect(() => {
     fetchData("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
@@ -53,20 +59,17 @@ const BidModal = (props: IBidModal) => {
       sendTransaction(transaction, {
         onError: (error) => {
           console.error("Transaction error:", error);
-          toast.error(`Error! ${error.message}`, {
+          toast.error(`Error!`, {
             duration: 5000,
             position: "top-right",
           });
         },
         onSuccess: (result) => {
           console.log("Transaction successful", result);
-          toast.success(
-            `Success!`,
-            {
-              duration: 5000,
-              position: "top-right",
-            }
-          );
+          toast.success(`Success! Please try to refresh the page.`, {
+            duration: 5000,
+            position: "top-right",
+          });
           close();
         },
       });
@@ -81,7 +84,7 @@ const BidModal = (props: IBidModal) => {
     close();
   };
   return (
-    <>
+    <div>
       <Button
         disabled={props.disabled}
         onClick={open}
@@ -111,7 +114,7 @@ const BidModal = (props: IBidModal) => {
                   as="h3"
                   className="text-base/7 font-medium text-white"
                 >
-                  ID {typeof props.id}
+                  {/* ID {typeof props.id} */}
                 </DialogTitle>
                 <Field>
                   <Label className="text-sm/6 font-medium text-white">
@@ -126,9 +129,13 @@ const BidModal = (props: IBidModal) => {
                         type="number"
                         value={bid ?? ""}
                         onChange={(e) => setBid(e?.target?.value)}
+                        disabled={profile?.address == props.seller}
                         className={clsx(
-                          "mt-3 block w-full rounded-lg border-none bg-slate-500/70 py-1.5 px-3 text-sm/6 text-white",
-                          "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+                          "mt-3 block w-full rounded-lg border-none bg-slate-500/70 py-1.5 px-3 text-sm/6 text-white ",
+                          "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 ",
+                          profile?.address == props.seller
+                            ? "cursor-not-allowed"
+                            : ""
                         )}
                       />
                     </div>
@@ -139,24 +146,37 @@ const BidModal = (props: IBidModal) => {
                       <div>
                         <p className="w-full">USD</p>
                       </div>
-                      <div>{bid ? convert.USD * bid : ""}</div>
+                      <div>{bid ? convert?.USD * bid : ""}</div>
                     </div>
                   </div>
                 </Field>
                 <div className="mt-4">
                   <Button
-                    className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
+                    disabled={!bid}
+                    className={
+                      (bid && bid > props.gapBid + props.highestBid
+                        ? "bg-indigo-700 data-[hover]:bg-indigo-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-indigo-700"
+                        : "bg-gray700 data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700 cursor-not-allowed") +
+                      " inline-flex items-center gap-2 rounded-md  py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none duration-300"
+                    }
                     type="submit"
                   >
                     Confirm
                   </Button>
+                </div>
+                <div className="mt-4">
+                  <p className="text-red-400">
+                    {profile?.address == props.seller
+                      ? "*You can't bid your auction"
+                      : ""}
+                  </p>
                 </div>
               </DialogPanel>
             </div>
           </div>
         </form>
       </Dialog>
-    </>
+    </div>
   );
 };
 const fetchData = async (url: string): Promise<any> => {

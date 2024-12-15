@@ -2,8 +2,11 @@ import { Button, Field, Input } from "@headlessui/react";
 import React, { useState } from "react";
 import clsx from "clsx";
 import AddAuction from "./AddAuction";
-
-const AuctionsHeader = () => {
+interface IAuctionsHeader {
+  search: string;
+  setSearch: any;
+}
+const AuctionsHeader = (props: IAuctionsHeader) => {
   const [filter1, setFilter1] = useState(false);
   const [filter2, setFilter2] = useState(false);
   const [filter3, setFilter3] = useState(false);
@@ -17,6 +20,8 @@ const AuctionsHeader = () => {
         <div className="w-full justify-center content-center xl:w-[31.33rem] xl:max-w-xl px-4 justify-self-center mx-auto">
           <Field>
             <Input
+              value={props.search}
+              onChange={(e) => props.setSearch(e.target.value)}
               type="text"
               placeholder="Search..."
               className={clsx(

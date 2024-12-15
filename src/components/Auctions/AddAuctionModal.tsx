@@ -72,7 +72,7 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
     sendTransaction(transaction, {
       onError: (error) => {
         console.error("Transaction error:", error);
-        toast.error(`Error! ${error.message}`, {
+        toast.error(`Error!`, {
           duration: 5000,
           position: "top-right",
         });
@@ -90,7 +90,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!_documents) return;
-    const formData = new FormData();
     openAuction();
     close();
   };
@@ -107,10 +106,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
         className="relative z-10 focus:outline-none"
         onClose={close}
       >
-        <form onSubmit={handleSubmit}>
-          asfadgfsd
-          <button type="submit">cek</button>
-        </form>
         <form onSubmit={handleSubmit}>
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
@@ -222,7 +217,6 @@ const AddAuctionModal = (props: IAddAuctionModal) => {
                 <div className="mt-4">
                   <Button
                     className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
-                    //   onClick={openAuction}
                     type="submit"
                   >
                     Confirm

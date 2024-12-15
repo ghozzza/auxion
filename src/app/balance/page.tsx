@@ -58,14 +58,14 @@ const Balance = () => {
     sendTransaction(transaction, {
       onError: (error) => {
         console.error("Transaction error:", error);
-        toast.error(`Error! ${error.message}`, {
+        toast.error(`Error!`, {
           duration: 5000,
           position: "top-right",
         });
       },
       onSuccess: (result) => {
         console.log("Transaction successful", result);
-        toast.success(`Success!`, {
+        toast.success(`Success! Please try to refresh the page.`, {
           duration: 5000,
           position: "top-right",
         });
@@ -168,7 +168,7 @@ const Balance = () => {
                             <Button
                               type="submit"
                               disabled={
-                                amount > convertToEth(balance) ? true : false
+                                amount > convertToEth(balance)
                               }
                               className={
                                 (amount > convertToEth(balance)
@@ -204,3 +204,5 @@ const useGetBalance = (profile: any) => {
 };
 
 export default Balance;
+// look at this site https://github.com/ghozzza/auxion
+// src/app/balance/page.tsx. please analyze that files, and analyze the files which contains with that, I have an issue about that, when I input some amount which is the amount is enough to withdraw, sometimes I have error message "MetaMask - RPC Error: Internal JSON-RPC error."

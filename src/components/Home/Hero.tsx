@@ -2,8 +2,11 @@ import React from "react";
 import Container from "../Container";
 import Image from "next/image";
 import heroImg from "../../../public/img/hero.png";
+import heroImgLight from "../../../public/img/hero_light.png";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 const Hero = () => {
+  const { theme, setTheme } = useTheme();
   return (
     <div data-aos="fade-up">
       <Container className="flex flex-wrap ">
@@ -47,13 +50,14 @@ const Hero = () => {
         <div className="flex items-center justify-center w-full lg:w-1/2">
           <div className="">
             <Image
-              src={heroImg}
+              src={theme === "light"
+                ? heroImgLight
+                : heroImg}
               width="616"
               height="617"
               className={"object-cover"}
               alt="Hero Illustration"
               loading="eager"
-              placeholder="blur"
             />
           </div>
         </div>
